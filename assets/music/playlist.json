@@ -1,0 +1,30 @@
+[
+  {
+    "id": "track-weng-dahan-folk-songs",
+    "title": "这些民谣 - 一次听个够",
+    "artist": "翁大涵",
+    "src": "./assets/music/weng-dahan-these-folk-songs.mp3",
+    "source": "默认歌单"
+  },
+  {
+    "id": "track-jay-chou-grandma",
+    "title": "外婆",
+    "artist": "周杰伦",
+    "src": "./assets/music/jay-chou-grandma.m4a",
+    "source": "默认歌单"
+  },
+  {
+    "id": "track-jay-chou-nocturne",
+    "title": "夜曲",
+    "artist": "周杰伦",
+    "src": "./assets/music/jay-chou-nocturne.m4a",
+    "source": "默认歌单"
+  },
+  {
+    "id": "track-jay-chou-in-the-name-of-the-father",
+    "title": "以父之名",
+    "artist": "周杰伦",
+    "src": "./assets/music/jay-chou-in-the-name-of-the-father.m4a",
+    "source": "默认歌单"
+  }
+]

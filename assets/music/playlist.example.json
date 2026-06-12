@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Example Track",
+    "artist": "Local file",
+    "src": "./assets/music/example.mp3",
+    "lrc": "./assets/music/example.lrc"
+  },
+  {
+    "title": "Remote Track",
+    "artist": "Direct URL",
+    "src": "https://example.com/music.mp3",
+    "lrc": "https://example.com/music.lrc"
+  }
+]
