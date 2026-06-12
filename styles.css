@@ -1,0 +1,333 @@
+:root {
+  --bg: #f3efe7;
+  --surface: rgba(255, 251, 245, 0.82);
+  --surface-strong: #fffaf1;
+  --text: #1f1d1a;
+  --muted: #62594f;
+  --line: rgba(53, 43, 32, 0.12);
+  --accent: #b9582d;
+  --accent-deep: #7f3112;
+  --accent-soft: rgba(185, 88, 45, 0.12);
+  --teal: #1f6d67;
+  --shadow: 0 20px 60px rgba(47, 32, 15, 0.12);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(31, 109, 103, 0.16), transparent 32%),
+    radial-gradient(circle at 85% 20%, rgba(185, 88, 45, 0.18), transparent 26%),
+    linear-gradient(145deg, #f6f2ea 0%, #efe8db 45%, #f3efe7 100%);
+}
+
+.page-shell {
+  width: min(1160px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 64px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 52px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.94), rgba(251, 245, 236, 0.8)),
+    linear-gradient(120deg, rgba(185, 88, 45, 0.16), rgba(31, 109, 103, 0.08));
+  box-shadow: var(--shadow);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -80px -120px auto;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(185, 88, 45, 0.18), transparent 70%);
+  pointer-events: none;
+}
+
+.eyebrow,
+.panel-kicker {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.hero h1 {
+  margin: 0;
+  max-width: 11ch;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 0.95;
+}
+
+.hero-copy {
+  max-width: 620px;
+  margin: 22px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.primary-link,
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.primary-link {
+  color: #fff;
+  background: linear-gradient(120deg, var(--accent), #d97a45);
+  box-shadow: 0 16px 28px rgba(185, 88, 45, 0.26);
+}
+
+.secondary-link {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.56);
+  border-color: var(--line);
+}
+
+.primary-link:hover,
+.secondary-link:hover,
+.service-card:hover {
+  transform: translateY(-2px);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(36, 27, 16, 0.08);
+}
+
+.panel-heading {
+  margin-bottom: 18px;
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.intro-panel,
+.service-panel,
+.status-panel,
+.notes-panel {
+  padding: 28px;
+}
+
+.intro-panel {
+  grid-column: span 5;
+}
+
+.service-panel {
+  grid-column: span 7;
+}
+
+.status-panel {
+  grid-column: span 4;
+}
+
+.notes-panel {
+  grid-column: span 8;
+}
+
+.feature-list {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-list li {
+  position: relative;
+  padding-left: 18px;
+  margin-top: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.feature-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.service-list {
+  display: grid;
+  gap: 14px;
+}
+
+.service-card {
+  display: grid;
+  gap: 6px;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(31, 29, 26, 0.08);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--surface-strong), rgba(255, 249, 241, 0.82));
+  text-decoration: none;
+  color: inherit;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.service-card:hover {
+  border-color: rgba(185, 88, 45, 0.3);
+  box-shadow: 0 16px 32px rgba(54, 38, 20, 0.08);
+}
+
+.service-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.service-url,
+.service-note,
+.status-copy,
+.notes-panel p,
+.intro-panel p {
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.service-url {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.92rem;
+  color: var(--accent-deep);
+}
+
+.status-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status-pill.online {
+  background: rgba(31, 109, 103, 0.12);
+  color: var(--teal);
+}
+
+.status-pill.tunnel {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+.status-pill.direct {
+  background: rgba(84, 92, 176, 0.12);
+  color: #3846a8;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.notes-grid article {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(31, 29, 26, 0.07);
+}
+
+.notes-grid h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+@media (max-width: 980px) {
+  .intro-panel,
+  .service-panel,
+  .status-panel,
+  .notes-panel {
+    grid-column: 1 / -1;
+  }
+
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 34px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 20px, 1160px);
+    padding-top: 18px;
+  }
+
+  .hero-copy,
+  .service-note,
+  .service-url,
+  .intro-panel p,
+  .notes-panel p,
+  .status-copy {
+    font-size: 0.96rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .primary-link,
+  .secondary-link {
+    width: 100%;
+  }
+}

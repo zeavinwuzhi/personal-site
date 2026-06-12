@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zwwz.fun</title>
+  <meta
+    name="description"
+    content="个人主页，集中展示常用入口、简介与在线状态。"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">ZWWZ.FUN</p>
+      <h1>一个给自己留灯的个人主页</h1>
+      <p class="hero-copy">
+        这里放常用入口、在线服务和一点点个人介绍。以后想加作品、博客、相册，
+        也都可以继续往这里长。
+      </p>
+
+      <div class="hero-actions">
+        <a class="primary-link" href="https://nas.zwwz.fun" target="_blank" rel="noreferrer">
+          打开 NAS
+        </a>
+        <a class="secondary-link" href="https://remote.zwwz.fun/guacamole/" target="_blank" rel="noreferrer">
+          打开 Remote
+        </a>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <section class="panel intro-panel">
+        <div class="panel-heading">
+          <p class="panel-kicker">About</p>
+          <h2>这台站点现在在做什么</h2>
+        </div>
+
+        <p>
+          根域名以后可以做成个人介绍页、项目导航页，或者慢慢扩成博客。现在先把
+          常用服务整合出来，外网访问更顺手。
+        </p>
+
+        <ul class="feature-list">
+          <li>根域名做公开主页，不和 NAS 管理入口混在一起</li>
+          <li>远程入口和管理入口继续走 Cloudflare 保护</li>
+          <li>IPv6 直连保留给高速度、低中转的场景</li>
+        </ul>
+      </section>
+
+      <section class="panel service-panel">
+        <div class="panel-heading">
+          <p class="panel-kicker">Services</p>
+          <h2>常用入口</h2>
+        </div>
+
+        <div class="service-list">
+          <a class="service-card" href="https://nas.zwwz.fun" target="_blank" rel="noreferrer">
+            <span class="service-title">NAS 管理</span>
+            <span class="service-url">nas.zwwz.fun</span>
+            <span class="service-note">Cloudflare Tunnel + Access</span>
+          </a>
+
+          <a class="service-card" href="https://remote.zwwz.fun/guacamole/" target="_blank" rel="noreferrer">
+            <span class="service-title">Remote Desktop</span>
+            <span class="service-url">remote.zwwz.fun/guacamole/</span>
+            <span class="service-note">Guacamole 远程桌面入口</span>
+          </a>
+
+          <a class="service-card" href="http://nas6.zwwz.fun:5666" target="_blank" rel="noreferrer">
+            <span class="service-title">IPv6 直连</span>
+            <span class="service-url">nas6.zwwz.fun:5666</span>
+            <span class="service-note">仅 IPv6 网络可访问</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="panel status-panel">
+        <div class="panel-heading">
+          <p class="panel-kicker">Status</p>
+          <h2>当前网络结构</h2>
+        </div>
+
+        <div class="status-pills">
+          <span class="status-pill online">NAS 入口已分流</span>
+          <span class="status-pill tunnel">Tunnel 正常</span>
+          <span class="status-pill direct">IPv6 直连保留</span>
+        </div>
+
+        <p class="status-copy">
+          `nas.zwwz.fun` 和 `remote.zwwz.fun` 适合日常安全访问，
+          `nas6.zwwz.fun` 更适合需要低中转的 IPv6 场景。
+        </p>
+      </section>
+
+      <section class="panel notes-panel">
+        <div class="panel-heading">
+          <p class="panel-kicker">Next</p>
+          <h2>后面还可以继续加</h2>
+        </div>
+
+        <div class="notes-grid">
+          <article>
+            <h3>项目展示</h3>
+            <p>放一些你想公开展示的工具、作品、文档，主页会更完整。</p>
+          </article>
+          <article>
+            <h3>博客页</h3>
+            <p>后面可以换成 Hugo、Astro 或其他静态站生成器继续扩展。</p>
+          </article>
+          <article>
+            <h3>导航页</h3>
+            <p>如果你还有别的子域名服务，也可以都集中挂在这里。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
