@@ -1,8 +1,0 @@
-{
-  "name": "zeavin-homepage",
-  "private": true,
-  "version": "1.0.0",
-  "scripts": {
-    "build": "powershell -ExecutionPolicy Bypass -File ./scripts/build-static.ps1"
-  }
-}
