@@ -20,6 +20,39 @@ const lyricsWindow = document.getElementById("lyrics-window");
 const lyricPrev = document.getElementById("lyric-prev");
 const lyricCurrent = document.getElementById("lyric-current");
 const lyricNext = document.getElementById("lyric-next");
+const heroGrid = document.querySelector(".hero-grid");
+const turntableCard = document.getElementById("turntable-card");
+const playerShellBody = document.getElementById("player-shell-body");
+const playerShellState = document.getElementById("player-shell-state");
+const playerVisibilityToggle = document.getElementById("player-visibility-toggle");
+const playerVisibilityLabel = document.getElementById("player-visibility-label");
+const playerCollapsedSummary = document.getElementById("player-collapsed-summary");
+const playerCollapsedTitle = document.getElementById("player-collapsed-title");
+const playerCollapsedMeta = document.getElementById("player-collapsed-meta");
+const liveClock = document.getElementById("live-clock");
+const currentYear = document.getElementById("current-year");
+const portalAuthState = document.getElementById("portal-auth-state");
+const authToggleButton = document.getElementById("auth-toggle-button");
+const authSettingsButton = document.getElementById("auth-settings-button");
+const accessNote = document.getElementById("access-note");
+const protectedEntryGroup = document.getElementById("protected-entry-group");
+const accessLockedState = document.getElementById("access-locked-state");
+const protectedEntryButtons = document.querySelectorAll(".protected-entry-button");
+const unlockModal = document.getElementById("unlock-modal");
+const unlockBackdrop = document.getElementById("unlock-modal-backdrop");
+const unlockForm = document.getElementById("unlock-form");
+const unlockInput = document.getElementById("unlock-input");
+const unlockCancel = document.getElementById("unlock-cancel");
+const unlockSubmitButton = document.getElementById("unlock-submit-button");
+const unlockFeedback = document.getElementById("unlock-feedback");
+const settingsModal = document.getElementById("settings-modal");
+const settingsBackdrop = document.getElementById("settings-modal-backdrop");
+const settingsForm = document.getElementById("settings-form");
+const settingsCurrentPassword = document.getElementById("settings-current-password");
+const settingsNewPassword = document.getElementById("settings-new-password");
+const settingsConfirmPassword = document.getElementById("settings-confirm-password");
+const settingsCancel = document.getElementById("settings-cancel");
+const settingsFeedback = document.getElementById("settings-feedback");
 const favoritesGrid = document.getElementById("favorites-grid");
 const favoriteAddButton = document.getElementById("favorite-add-button");
 const favoriteExportButton = document.getElementById("favorite-export-button");
@@ -28,6 +61,8 @@ const favoritesImportInput = document.getElementById("favorites-import-input");
 
 const FAVORITES_KEY = "zeavin-favorites";
 const PLAYLIST_STORAGE_KEY = "zeavin-custom-playlist";
+const PROTECTED_CONFIG_KEY = "zeavin-protected-config";
+const PLAYER_COLLAPSE_KEY = "zeavin-player-collapsed";
 const DEFAULT_PLAYLIST_URL = "./assets/music/playlist.json";
 const favoriteThemes = [
   "favorite-blue",
@@ -35,6 +70,26 @@ const favoriteThemes = [
   "favorite-gold",
   "favorite-steel",
 ];
+const defaultProtectedEntries = {
+  nas4: {
+    salt: "mlW1QDVzwGuN8iqXQoNSVg==",
+    iv: "lKfVZpUhGD0GCL2Q",
+    data: "fejj0peTVZjwHNfs8BI5MXlGcAE=",
+    tag: "/BHgo9DdwqnsCunS+osa7g==",
+  },
+  nas6: {
+    salt: "H3TwrEViWIM0y2mxQzq4Cw==",
+    iv: "Gv1iaD+UvAXfeEVV",
+    data: "WncCuFFVzioUMFSUWx5f5w/qKIm5EMp7zg==",
+    tag: "WjApvxzDv3lYe1DEj0RAQw==",
+  },
+  remote: {
+    salt: "RXti18hxvI4aA0o5pecilQ==",
+    iv: "PhWIqUMHK4TFERbY",
+    data: "8WJyS85i3ITjmZeYoic5QSr//8IahtM8xNgtBRnIfCGAhg==",
+    tag: "pfPTGRKzpL602JhQUmRM7Q==",
+  },
+};
 
 const copy = {
   baiduNote: "\u641c\u7d22\u5165\u53e3",
@@ -48,6 +103,7 @@ const copy = {
   paused: "\u5df2\u6682\u505c",
   playFailed: "\u64ad\u653e\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u97f3\u9891\u5730\u5740\u6216\u6587\u4ef6",
   ended: "\u64ad\u653e\u7ed3\u675f",
+  loadingDefaultPlaylist: "\u6b63\u5728\u8bfb\u53d6\u9ed8\u8ba4\u6b4c\u5355",
   lyricsIdle: "\u7b49\u5f85\u97f3\u4e50\u548c\u6b4c\u8bcd",
   lyricsLoaded: "\u6b4c\u8bcd\u5df2\u8f7d\u5165",
   lyricsMissing: "\u6682\u65e0\u6b4c\u8bcd",
@@ -73,6 +129,21 @@ const copy = {
   promptTrackTitle: "\u6b4c\u66f2\u540d\u79f0",
   promptTrackUrl: "\u97f3\u9891\u76f4\u94fe\uff08mp3/flac/m4a\uff09",
   promptLyricUrl: "\u6b4c\u8bcd LRC \u76f4\u94fe\uff08\u53ef\u7559\u7a7a\uff09",
+  protectedEntryReady: "\u79c1\u6709\u5165\u53e3\u5df2\u89e3\u9501",
+  protectedEntryFailed: "\u53e3\u4ee4\u4e0d\u6b63\u786e\uff0c\u65e0\u6cd5\u89e3\u5bc6\u79c1\u6709\u5165\u53e3",
+  protectedEntryMissing: "\u79c1\u6709\u5165\u53e3\u914d\u7f6e\u4e22\u5931",
+  protectedEntryUnsupported: "\u5f53\u524d\u6d4f\u89c8\u5668\u4e0d\u652f\u6301 Web Crypto\uff0c\u65e0\u6cd5\u89e3\u5bc6\u5165\u53e3",
+  protectedEntryHint: "\u8f93\u5165\u767b\u5f55\u53e3\u4ee4\u540e\u6253\u5f00\u79c1\u6709\u5165\u53e3",
+  authLoggedOut: "\u672a\u767b\u5f55",
+  authLoggedIn: "\u5df2\u767b\u5f55",
+  authLoginReady: "\u5df2\u767b\u5f55\uff0c\u53ef\u76f4\u63a5\u8bbf\u95ee\u79c1\u6709\u5165\u53e3",
+  authLoggedOutStatus: "\u5df2\u9000\u51fa\u767b\u5f55",
+  authLoginTitle: "\u767b\u5f55\u79c1\u6709\u5165\u53e3",
+  settingsSaved: "\u65b0\u53e3\u4ee4\u5df2\u4fdd\u5b58",
+  settingsNeedLogin: "\u8bf7\u5148\u767b\u5f55\u540e\u518d\u4fee\u6539\u53e3\u4ee4",
+  settingsCurrentInvalid: "\u5f53\u524d\u53e3\u4ee4\u4e0d\u6b63\u786e",
+  settingsPasswordMismatch: "\u4e24\u6b21\u8f93\u5165\u7684\u65b0\u53e3\u4ee4\u4e0d\u4e00\u81f4",
+  settingsPasswordShort: "\u65b0\u53e3\u4ee4\u81f3\u5c11\u8bf7\u8f93\u5165 8 \u4e2a\u5b57\u7b26",
 };
 
 const defaultFavorites = [
@@ -110,6 +181,10 @@ let playlist = loadStoredPlaylist();
 let activeTrackIndex = -1;
 let lyrics = [];
 let activeLyricIndex = -1;
+let unlockTargetId = "";
+let unlockedPassphrase = "";
+let protectedEntries = loadProtectedEntries();
+let playerCollapsed = loadPlayerCollapsedPreference();
 
 function formatTime(timeInSeconds) {
   if (!Number.isFinite(timeInSeconds) || timeInSeconds < 0) {
@@ -124,6 +199,376 @@ function formatTime(timeInSeconds) {
 
 function setStatus(message) {
   trackStatus.textContent = message;
+  syncCollapsedPlayerSummary();
+}
+
+function base64ToBytes(value) {
+  const binary = window.atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return bytes;
+}
+
+function bytesToBase64(bytes) {
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return window.btoa(binary);
+}
+
+function loadProtectedEntries() {
+  try {
+    const raw = window.localStorage.getItem(PROTECTED_CONFIG_KEY);
+    if (!raw) {
+      return structuredClone(defaultProtectedEntries);
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      return structuredClone(defaultProtectedEntries);
+    }
+
+    const normalized = {};
+    Object.keys(defaultProtectedEntries).forEach((key) => {
+      const item = parsed[key];
+      if (
+        item
+        && typeof item.salt === "string"
+        && typeof item.iv === "string"
+        && typeof item.data === "string"
+        && typeof item.tag === "string"
+      ) {
+        normalized[key] = item;
+      } else {
+        normalized[key] = defaultProtectedEntries[key];
+      }
+    });
+    return normalized;
+  } catch {
+    return structuredClone(defaultProtectedEntries);
+  }
+}
+
+function saveProtectedEntries() {
+  window.localStorage.setItem(PROTECTED_CONFIG_KEY, JSON.stringify(protectedEntries));
+}
+
+function saveSessionPassphrase(passphrase) {
+  unlockedPassphrase = passphrase;
+}
+
+async function decryptProtectedEntry(targetId, passphrase) {
+  if (!window.crypto?.subtle) {
+    throw new Error(copy.protectedEntryUnsupported);
+  }
+
+  const payload = protectedEntries[targetId];
+  if (!payload) {
+    throw new Error(copy.protectedEntryMissing);
+  }
+
+  const encoder = new TextEncoder();
+  const baseKey = await window.crypto.subtle.importKey(
+    "raw",
+    encoder.encode(passphrase),
+    "PBKDF2",
+    false,
+    ["deriveKey"],
+  );
+  const key = await window.crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt: base64ToBytes(payload.salt),
+      iterations: 120000,
+      hash: "SHA-256",
+    },
+    baseKey,
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    false,
+    ["decrypt"],
+  );
+  const encryptedData = base64ToBytes(payload.data);
+  const authTag = base64ToBytes(payload.tag);
+  const encryptedWithTag = new Uint8Array(encryptedData.length + authTag.length);
+  encryptedWithTag.set(encryptedData);
+  encryptedWithTag.set(authTag, encryptedData.length);
+  const result = await window.crypto.subtle.decrypt(
+    {
+      name: "AES-GCM",
+      iv: base64ToBytes(payload.iv),
+      tagLength: 128,
+    },
+    key,
+    encryptedWithTag,
+  );
+  return new TextDecoder().decode(result);
+}
+
+async function encryptProtectedValue(value, passphrase) {
+  if (!window.crypto?.subtle) {
+    throw new Error(copy.protectedEntryUnsupported);
+  }
+
+  const encoder = new TextEncoder();
+  const salt = window.crypto.getRandomValues(new Uint8Array(16));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const baseKey = await window.crypto.subtle.importKey(
+    "raw",
+    encoder.encode(passphrase),
+    "PBKDF2",
+    false,
+    ["deriveKey"],
+  );
+  const key = await window.crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt,
+      iterations: 120000,
+      hash: "SHA-256",
+    },
+    baseKey,
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    false,
+    ["encrypt"],
+  );
+  const encrypted = await window.crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv,
+      tagLength: 128,
+    },
+    key,
+    encoder.encode(value),
+  );
+  const bytes = new Uint8Array(encrypted);
+  const encryptedData = bytes.slice(0, Math.max(0, bytes.length - 16));
+  const authTag = bytes.slice(Math.max(0, bytes.length - 16));
+  return {
+    salt: bytesToBase64(salt),
+    iv: bytesToBase64(iv),
+    data: bytesToBase64(encryptedData),
+    tag: bytesToBase64(authTag),
+  };
+}
+
+function setAccessNote() {
+  if (!accessNote) {
+    return;
+  }
+
+  accessNote.textContent = unlockedPassphrase
+    ? "\u5df2\u767b\u5f55\uff0c\u8fd9\u4e09\u4e2a\u79c1\u6709\u5165\u53e3\u53ef\u76f4\u63a5\u6253\u5f00\u3002"
+    : "\u79c1\u6709\u5165\u53e3\u5df2\u9690\u85cf\u771f\u5b9e\u5730\u5740\uff0c\u767b\u5f55\u540e\u53ef\u76f4\u63a5\u8bbf\u95ee\u3002";
+}
+
+function updateAuthUI() {
+  const authenticated = Boolean(unlockedPassphrase);
+
+  if (portalAuthState) {
+    portalAuthState.textContent = authenticated ? copy.authLoggedIn : copy.authLoggedOut;
+    portalAuthState.classList.toggle("is-authenticated", authenticated);
+  }
+
+  if (authToggleButton) {
+    authToggleButton.textContent = authenticated ? "Logout" : "Login";
+  }
+
+  if (authSettingsButton) {
+    authSettingsButton.disabled = !authenticated;
+  }
+
+  if (protectedEntryGroup) {
+    protectedEntryGroup.hidden = !authenticated;
+  }
+
+  if (accessLockedState) {
+    accessLockedState.hidden = authenticated;
+  }
+
+  protectedEntryButtons.forEach((button) => {
+    button.hidden = !authenticated;
+  });
+
+  setAccessNote();
+}
+
+function hideUnlockModal() {
+  unlockModal.hidden = true;
+  unlockTargetId = "";
+  unlockFeedback.textContent = "";
+  unlockForm.reset();
+}
+
+function showUnlockModal(targetId = "") {
+  unlockTargetId = targetId;
+  unlockSubmitButton.textContent = targetId ? "\u767b\u5f55\u5e76\u6253\u5f00" : "Login";
+  unlockFeedback.textContent = "";
+  unlockForm.reset();
+  unlockModal.hidden = false;
+  window.requestAnimationFrame(() => {
+    unlockInput.focus();
+  });
+}
+
+function hideSettingsModal() {
+  settingsModal.hidden = true;
+  settingsFeedback.textContent = "";
+  settingsForm.reset();
+}
+
+function showSettingsModal() {
+  if (!unlockedPassphrase) {
+    setStatus(copy.settingsNeedLogin);
+    showUnlockModal();
+    return;
+  }
+
+  settingsFeedback.textContent = "";
+  settingsForm.reset();
+  settingsModal.hidden = false;
+  window.requestAnimationFrame(() => {
+    settingsCurrentPassword.focus();
+  });
+}
+
+async function openProtectedEntry(targetId, passphrase) {
+  const url = await decryptProtectedEntry(targetId, passphrase);
+  saveSessionPassphrase(passphrase);
+  updateAuthUI();
+  window.open(url, "_blank", "noopener,noreferrer");
+  setStatus(copy.protectedEntryReady);
+}
+
+async function loginWithPassphrase(passphrase) {
+  await decryptProtectedEntry("nas4", passphrase);
+  saveSessionPassphrase(passphrase);
+  updateAuthUI();
+  setStatus(copy.authLoginReady);
+}
+
+function restoreSessionAuth() {
+  saveSessionPassphrase("");
+  updateAuthUI();
+}
+
+function loadPlayerCollapsedPreference() {
+  try {
+    const raw = window.localStorage.getItem(PLAYER_COLLAPSE_KEY);
+    if (raw === "true") {
+      return true;
+    }
+    if (raw === "false") {
+      return false;
+    }
+  } catch {
+    return window.matchMedia("(max-width: 720px)").matches;
+  }
+
+  return window.matchMedia("(max-width: 720px)").matches;
+}
+
+function savePlayerCollapsedPreference() {
+  window.localStorage.setItem(PLAYER_COLLAPSE_KEY, String(playerCollapsed));
+}
+
+function syncCollapsedPlayerSummary() {
+  if (!playerCollapsedTitle || !playerCollapsedMeta) {
+    return;
+  }
+
+  const titleText = trackTitle?.textContent?.trim() || copy.trackIdle;
+  const subtitleText = trackSubtitle?.textContent?.trim() || copy.trackHint;
+  playerCollapsedTitle.textContent = titleText;
+  playerCollapsedMeta.textContent = subtitleText;
+}
+
+function applyPlayerVisibility() {
+  if (!turntableCard || !playerShellBody || !playerVisibilityToggle) {
+    return;
+  }
+
+  turntableCard.classList.toggle("is-collapsed", playerCollapsed);
+  heroGrid?.classList.toggle("player-collapsed", playerCollapsed);
+  playerShellBody.hidden = playerCollapsed;
+
+  if (playerCollapsedSummary) {
+    playerCollapsedSummary.hidden = !playerCollapsed;
+  }
+
+  if (playerShellState) {
+    playerShellState.textContent = playerCollapsed
+      ? "\u64ad\u653e\u5668\u5df2\u9690\u85cf"
+      : "\u64ad\u653e\u5668\u5df2\u5c55\u5f00";
+  }
+
+  if (playerVisibilityLabel) {
+    playerVisibilityLabel.textContent = playerCollapsed
+      ? "\u5c55\u5f00\u64ad\u653e\u5668"
+      : "\u9690\u85cf";
+  }
+
+  playerVisibilityToggle.setAttribute(
+    "aria-label",
+    playerCollapsed ? "\u5c55\u5f00\u64ad\u653e\u5668" : "\u9690\u85cf\u64ad\u653e\u5668",
+  );
+  playerVisibilityToggle.setAttribute("aria-expanded", String(!playerCollapsed));
+  syncCollapsedPlayerSummary();
+}
+
+function togglePlayerVisibility() {
+  playerCollapsed = !playerCollapsed;
+  savePlayerCollapsedPreference();
+  applyPlayerVisibility();
+}
+
+async function handleProtectedEntryClick(targetId) {
+  if (!targetId || !protectedEntries[targetId]) {
+    setStatus(copy.protectedEntryMissing);
+    return;
+  }
+
+  if (unlockedPassphrase) {
+    try {
+      await openProtectedEntry(targetId, unlockedPassphrase);
+      return;
+    } catch {
+      saveSessionPassphrase("");
+      updateAuthUI();
+    }
+  }
+
+  setStatus(copy.protectedEntryHint);
+  showUnlockModal(targetId);
+}
+
+function updateLiveClock() {
+  if (!liveClock) {
+    return;
+  }
+
+  const now = new Date();
+  const datePart = new Intl.DateTimeFormat("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+    timeZone: "Asia/Shanghai",
+  }).format(now);
+  const timePart = new Intl.DateTimeFormat("zh-CN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Shanghai",
+  }).format(now);
+  liveClock.textContent = `${datePart} ${timePart}`;
 }
 
 function getTrackSourceLabel(track) {
@@ -132,9 +577,10 @@ function getTrackSourceLabel(track) {
 
 function updateTrackMeta(track, index = activeTrackIndex) {
   if (!track) {
-    trackKicker.textContent = "DEFAULT PLAYLIST";
+    trackKicker.textContent = "ZEAVIN PORTAL";
     trackTitle.textContent = copy.trackIdle;
     trackSubtitle.textContent = copy.trackHint;
+    syncCollapsedPlayerSummary();
     return;
   }
 
@@ -144,6 +590,7 @@ function updateTrackMeta(track, index = activeTrackIndex) {
   trackKicker.textContent = `${String(currentIndex + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")} \u00b7 ${source}`;
   trackTitle.textContent = track.title;
   trackSubtitle.textContent = getTrackSourceLabel(track);
+  syncCollapsedPlayerSummary();
 }
 
 function syncPlaybackState() {
@@ -585,6 +1032,105 @@ function askFavoriteDraft(currentFavorite = null) {
   };
 }
 
+function getFavoriteHostname(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname.replace(/^www\./i, "");
+  } catch {
+    return simplifyUrl(url);
+  }
+}
+
+function getFavoriteBrandDetails(favorite) {
+  const hostname = getFavoriteHostname(favorite.url);
+  const brandMap = {
+    "github.com": {
+      className: "favorite-brand-github",
+      iconUrl: "https://cdn.simpleicons.org/github/1f2328",
+    },
+    "google.com": {
+      className: "favorite-brand-google",
+      iconUrl: "https://cdn.simpleicons.org/google",
+    },
+    "baidu.com": {
+      className: "favorite-brand-baidu",
+      iconUrl: "https://cdn.simpleicons.org/baidu/2932e1",
+    },
+    "dash.cloudflare.com": {
+      className: "favorite-brand-cloudflare",
+      iconUrl: "https://cdn.simpleicons.org/cloudflare/f38020",
+    },
+    "zwwz.fun": {
+      className: "favorite-brand-zwwz",
+      fallbackText: "Z",
+    },
+  };
+
+  if (brandMap[hostname]) {
+    return brandMap[hostname];
+  }
+
+  if (hostname.endsWith(".zwwz.fun")) {
+    return {
+      className: "favorite-brand-zwwz",
+      fallbackText: "Z",
+    };
+  }
+
+  return {
+    className: "",
+    iconUrl: `https://www.google.com/s2/favicons?sz=64&domain_url=${encodeURIComponent(favorite.url)}`,
+  };
+}
+
+function getFavoriteFallbackText(title) {
+  const trimmed = String(title || "").trim();
+  if (!trimmed) {
+    return "+";
+  }
+
+  return trimmed.charAt(0).toUpperCase();
+}
+
+function appendFavoriteIcon(container, favorite) {
+  const brand = getFavoriteBrandDetails(favorite);
+  const iconShell = document.createElement("span");
+  iconShell.className = "favorite-icon-shell";
+
+  const icon = document.createElement("span");
+  icon.className = "favorite-icon";
+  if (brand.className) {
+    icon.classList.add(brand.className);
+  }
+
+  const image = document.createElement("img");
+  image.className = "favorite-icon-image";
+  image.src = brand.iconUrl || "";
+  image.alt = "";
+  image.loading = "lazy";
+  image.referrerPolicy = "no-referrer";
+
+  const fallback = document.createElement("span");
+  fallback.className = "favorite-icon-fallback";
+  fallback.textContent = brand.fallbackText || getFavoriteFallbackText(favorite.title);
+
+  if (image.src) {
+    image.addEventListener("load", () => {
+      if (image.naturalWidth > 8 && image.naturalHeight > 8) {
+        icon.classList.add("has-image");
+      }
+    });
+
+    image.addEventListener("error", () => {
+      icon.classList.remove("has-image");
+    });
+  }
+
+  icon.append(image, fallback);
+  iconShell.append(icon);
+  container.append(iconShell);
+}
+
 function appendFavoriteCard(favorite, index) {
   const card = document.createElement("a");
   card.className = `favorite-card ${favorite.theme}`;
@@ -592,7 +1138,7 @@ function appendFavoriteCard(favorite, index) {
   card.target = "_blank";
   card.rel = "noreferrer";
   card.draggable = true;
-  card.title = copy.reorderHint;
+  card.title = `${favorite.title} · ${copy.reorderHint}`;
 
   card.addEventListener("dragstart", (event) => {
     draggedFavoriteIndex = index;
@@ -638,12 +1184,16 @@ function appendFavoriteCard(favorite, index) {
 
   const note = document.createElement("span");
   note.className = "favorite-url";
-  note.textContent = favorite.note;
+  note.textContent = favorite.note || getFavoriteHostname(favorite.url);
+
+  const meta = document.createElement("span");
+  meta.className = "favorite-meta";
+  meta.append(title, note);
 
   const editButton = document.createElement("button");
   editButton.className = "favorite-edit";
   editButton.type = "button";
-  editButton.textContent = copy.edit;
+  editButton.textContent = "Edit";
   editButton.setAttribute("aria-label", `${copy.edit} ${favorite.title}`);
   editButton.addEventListener("click", (event) => {
     event.preventDefault();
@@ -671,45 +1221,14 @@ function appendFavoriteCard(favorite, index) {
     renderFavorites();
   });
 
-  card.append(title, note, editButton);
+  appendFavoriteIcon(card, favorite);
+  card.append(meta, editButton);
   favoritesGrid.append(card);
-}
-
-function appendAddCard() {
-  const addCard = document.createElement("button");
-  addCard.className = "favorite-card favorite-add";
-  addCard.type = "button";
-
-  const addTitle = document.createElement("span");
-  addTitle.className = "favorite-title";
-  addTitle.textContent = copy.addTitle;
-
-  const addNote = document.createElement("span");
-  addNote.className = "favorite-url";
-  addNote.textContent = copy.addNote;
-
-  addCard.append(addTitle, addNote);
-  addCard.addEventListener("click", () => {
-    const draft = askFavoriteDraft();
-    if (!draft) {
-      return;
-    }
-
-    favorites.push({
-      ...draft,
-      theme: favoriteThemes[favorites.length % favoriteThemes.length],
-    });
-    saveFavorites();
-    renderFavorites();
-  });
-
-  favoritesGrid.append(addCard);
 }
 
 function renderFavorites() {
   favoritesGrid.innerHTML = "";
   favorites.forEach((favorite, index) => appendFavoriteCard(favorite, index));
-  appendAddCard();
 }
 
 function moveFavorite(fromIndex, toIndex) {
@@ -890,6 +1409,122 @@ favoriteImportButton.addEventListener("click", () => {
   favoritesImportInput.click();
 });
 
+playerVisibilityToggle?.addEventListener("click", togglePlayerVisibility);
+
+authToggleButton.addEventListener("click", () => {
+  if (unlockedPassphrase) {
+    saveSessionPassphrase("");
+    updateAuthUI();
+    hideUnlockModal();
+    hideSettingsModal();
+    setStatus(copy.authLoggedOutStatus);
+    return;
+  }
+
+  showUnlockModal();
+});
+
+authSettingsButton.addEventListener("click", showSettingsModal);
+
+protectedEntryButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    handleProtectedEntryClick(button.dataset.protectedTarget || "");
+  });
+});
+
+unlockBackdrop.addEventListener("click", hideUnlockModal);
+unlockCancel.addEventListener("click", hideUnlockModal);
+
+unlockForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const passphrase = unlockInput.value.trim();
+  if (!passphrase) {
+    unlockFeedback.textContent = copy.protectedEntryHint;
+    return;
+  }
+
+  try {
+    if (unlockTargetId) {
+      await openProtectedEntry(unlockTargetId, passphrase);
+    } else {
+      await loginWithPassphrase(passphrase);
+    }
+    hideUnlockModal();
+  } catch (error) {
+    const message = error instanceof Error
+      && (error.message === copy.protectedEntryMissing || error.message === copy.protectedEntryUnsupported)
+      ? error.message
+      : copy.protectedEntryFailed;
+    unlockFeedback.textContent = message;
+    setStatus(message);
+    unlockInput.select();
+  }
+});
+
+settingsBackdrop.addEventListener("click", hideSettingsModal);
+settingsCancel.addEventListener("click", hideSettingsModal);
+
+settingsForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!unlockedPassphrase) {
+    settingsFeedback.textContent = copy.settingsNeedLogin;
+    setStatus(copy.settingsNeedLogin);
+    return;
+  }
+
+  const currentPassword = settingsCurrentPassword.value.trim();
+  const newPassword = settingsNewPassword.value.trim();
+  const confirmPassword = settingsConfirmPassword.value.trim();
+
+  if (newPassword.length < 8) {
+    settingsFeedback.textContent = copy.settingsPasswordShort;
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    settingsFeedback.textContent = copy.settingsPasswordMismatch;
+    return;
+  }
+
+  try {
+    const decryptedEntries = await Promise.all(
+      Object.keys(protectedEntries).map(async (key) => ({
+        key,
+        value: await decryptProtectedEntry(key, currentPassword),
+      })),
+    );
+    const nextEntries = {};
+    for (const entry of decryptedEntries) {
+      nextEntries[entry.key] = await encryptProtectedValue(entry.value, newPassword);
+    }
+    protectedEntries = nextEntries;
+    saveProtectedEntries();
+    saveSessionPassphrase(newPassword);
+    updateAuthUI();
+    settingsFeedback.textContent = copy.settingsSaved;
+    setStatus(copy.settingsSaved);
+    window.setTimeout(() => {
+      hideSettingsModal();
+    }, 400);
+  } catch {
+    settingsFeedback.textContent = copy.settingsCurrentInvalid;
+    setStatus(copy.settingsCurrentInvalid);
+    settingsCurrentPassword.select();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !unlockModal.hidden) {
+    hideUnlockModal();
+  }
+
+  if (event.key === "Escape" && !settingsModal.hidden) {
+    hideSettingsModal();
+  }
+});
+
 favoritesImportInput.addEventListener("change", async (event) => {
   const target = event.target;
   const file = target.files && target.files[0];
@@ -911,11 +1546,19 @@ window.addEventListener("beforeunload", () => {
   objectUrls.forEach((url) => URL.revokeObjectURL(url));
 });
 
+if (currentYear) {
+  currentYear.textContent = String(new Date().getFullYear());
+}
+
 updateTrackMeta(null, -1);
-setStatus(copy.defaultPlaylistReady);
+setStatus(copy.loadingDefaultPlaylist);
 clearLyrics();
 renderFavorites();
 renderPlaylist();
 syncPlaybackState();
 syncProgress();
+applyPlayerVisibility();
+updateLiveClock();
+window.setInterval(updateLiveClock, 1000);
+restoreSessionAuth();
 loadDefaultPlaylist();

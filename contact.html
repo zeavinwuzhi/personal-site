@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeavin · 联系方式</title>
+  <meta name="description" content="Zeavin 的联系方式分区，统一放主页、GitHub 和后续可补充的对外联系入口。">
+  <meta name="theme-color" content="#14181d">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <main>
+      <section class="hero subpage-hero">
+        <div class="subpage-grid">
+          <div class="subpage-top">
+            <div class="portal-toolbar subpage-toolbar" aria-label="contact toolbar">
+              <div class="portal-auth-state">CONTACT</div>
+              <div class="portal-clock" aria-label="current time">
+                <strong class="portal-clock-value" id="live-clock">--:--</strong>
+              </div>
+              <div class="portal-toolbar-actions">
+                <a class="portal-toolbar-button" href="./index.html">Home</a>
+              </div>
+            </div>
+
+            <div class="subpage-intro">
+              <p class="subpage-kicker">Reach Out</p>
+              <h1>联系方式</h1>
+              <p>对外公开的联系入口、站点地址和代码仓库都可以收在这里。这样首页会更干净，需要找你的时候也能直接进入这一页。</p>
+            </div>
+
+            <nav class="page-nav" aria-label="site pages">
+              <a class="page-nav-link" href="./index.html">主页</a>
+              <a class="page-nav-link" href="./blog.html">博客</a>
+              <a class="page-nav-link" href="./profile.html">个人资料</a>
+              <a class="page-nav-link is-active" href="./contact.html" aria-current="page">联系方式</a>
+            </nav>
+          </div>
+
+          <section class="subpage-section" aria-labelledby="contact-public-title">
+            <div class="subpage-section-header">
+              <p class="subpage-kicker">Public Channels</p>
+              <h2 class="subpage-section-title" id="contact-public-title">当前可公开展示的入口</h2>
+              <p class="subpage-section-copy">这里先放公开可见的站点与仓库。更私有的 NAS 和远程入口仍然继续留在首页登录后访问。</p>
+            </div>
+
+            <div class="subpage-contact-grid">
+              <a class="subpage-contact-link" href="https://zwwz.fun" target="_blank" rel="noreferrer">
+                <p class="subpage-contact-label">Home</p>
+                <p class="subpage-contact-value">zwwz.fun</p>
+              </a>
+              <a class="subpage-contact-link" href="https://github.com/zeavinwuzhi/personal-site" target="_blank" rel="noreferrer">
+                <p class="subpage-contact-label">GitHub</p>
+                <p class="subpage-contact-value">personal-site</p>
+              </a>
+              <div class="subpage-contact-link">
+                <p class="subpage-contact-label">Mail</p>
+                <p class="subpage-contact-value">待补充</p>
+              </div>
+              <div class="subpage-contact-link">
+                <p class="subpage-contact-label">Message</p>
+                <p class="subpage-contact-value">后续可接留言页</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="subpage-section" aria-labelledby="contact-note-title">
+            <div class="subpage-section-header">
+              <p class="subpage-kicker">Notes</p>
+              <h2 class="subpage-section-title" id="contact-note-title">这一页后续可以继续增强</h2>
+            </div>
+            <ul class="subpage-list">
+              <li>补一个真正的邮箱、社交账号或留言方式。</li>
+              <li>如果你不想完全公开联系方式，可以只展示一个中转入口或表单。</li>
+              <li>私有服务继续和公开联系入口分开，结构上会更安全也更清晰。</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>Zeavin Portal <span id="current-year">2026</span> · 公开入口和私有入口，各归各位。</p>
+    </footer>
+  </div>
+
+  <script src="./subpage.js"></script>
+</body>
+</html>

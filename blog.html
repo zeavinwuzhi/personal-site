@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeavin · 博客</title>
+  <meta name="description" content="Zeavin 的博客分区，预留日常记录、项目复盘和随笔。">
+  <meta name="theme-color" content="#14181d">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <main>
+      <section class="hero subpage-hero">
+        <div class="subpage-grid">
+          <div class="subpage-top">
+            <div class="portal-toolbar subpage-toolbar" aria-label="blog toolbar">
+              <div class="portal-auth-state">BLOG</div>
+              <div class="portal-clock" aria-label="current time">
+                <strong class="portal-clock-value" id="live-clock">--:--</strong>
+              </div>
+              <div class="portal-toolbar-actions">
+                <a class="portal-toolbar-button" href="./index.html">Home</a>
+              </div>
+            </div>
+
+            <div class="subpage-intro">
+              <p class="subpage-kicker">Writing Deck</p>
+              <h1>博客与随笔</h1>
+              <p>这里准备放项目复盘、折腾记录、日常想法和一些慢慢长出来的长文。现在先把结构搭好，后面你可以继续往里面填真正的内容。</p>
+            </div>
+
+            <nav class="page-nav" aria-label="site pages">
+              <a class="page-nav-link" href="./index.html">主页</a>
+              <a class="page-nav-link is-active" href="./blog.html" aria-current="page">博客</a>
+              <a class="page-nav-link" href="./profile.html">个人资料</a>
+              <a class="page-nav-link" href="./contact.html">联系方式</a>
+            </nav>
+          </div>
+
+          <section class="subpage-section" aria-labelledby="blog-plan-title">
+            <div class="subpage-section-header">
+              <p class="subpage-kicker">Recent Columns</p>
+              <h2 class="subpage-section-title" id="blog-plan-title">准备展开的几个栏目</h2>
+              <p class="subpage-section-copy">先把你后续最可能持续更新的内容做成几个独立分栏，之后发文时就不会都堆在首页里。</p>
+            </div>
+
+            <div class="subpage-card-grid">
+              <article class="subpage-card">
+                <p class="subpage-card-kicker">01</p>
+                <h3>折腾记录</h3>
+                <p>记录 NAS、远程桌面、网络入口、页面改造这些“自己给自己搭系统”的过程。</p>
+              </article>
+              <article class="subpage-card">
+                <p class="subpage-card-kicker">02</p>
+                <h3>项目复盘</h3>
+                <p>把正在做的站点、工具或脚本拆成可回看的阶段笔记，方便以后重构或继续扩展。</p>
+              </article>
+              <article class="subpage-card">
+                <p class="subpage-card-kicker">03</p>
+                <h3>随笔碎片</h3>
+                <p>留给更生活化、情绪化、灵感型的内容，不必都写成长文，也能慢慢形成个人气味。</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="subpage-section" aria-labelledby="blog-roadmap-title">
+            <div class="subpage-section-header">
+              <p class="subpage-kicker">Posting Flow</p>
+              <h2 class="subpage-section-title" id="blog-roadmap-title">后续可以怎么继续补</h2>
+            </div>
+            <ul class="subpage-list">
+              <li>给博客接一个文章列表页，按时间或分类展示。</li>
+              <li>首页只保留 2 到 3 条最新文章预览，把完整阅读放到这里。</li>
+              <li>如果你后面要接 Markdown 或静态博客生成器，这一页也可以直接演化成真正的文章入口。</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>Zeavin Portal <span id="current-year">2026</span> · 让内容分层，也让主页更从容。</p>
+    </footer>
+  </div>
+
+  <script src="./subpage.js"></script>
+</body>
+</html>

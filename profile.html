@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeavin · 个人资料</title>
+  <meta name="description" content="Zeavin 的个人资料分区，放个人介绍、兴趣与正在进行的方向。">
+  <meta name="theme-color" content="#14181d">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <main>
+      <section class="hero subpage-hero">
+        <div class="subpage-grid">
+          <div class="subpage-top">
+            <div class="portal-toolbar subpage-toolbar" aria-label="profile toolbar">
+              <div class="portal-auth-state">PROFILE</div>
+              <div class="portal-clock" aria-label="current time">
+                <strong class="portal-clock-value" id="live-clock">--:--</strong>
+              </div>
+              <div class="portal-toolbar-actions">
+                <a class="portal-toolbar-button" href="./index.html">Home</a>
+              </div>
+            </div>
+
+            <div class="subpage-intro">
+              <p class="subpage-kicker">About Zeavin</p>
+              <h1>个人资料</h1>
+              <p>这一页适合把首页里那种“概览式介绍”拆开，单独放更完整的自我介绍、偏好、长期方向和持续在做的事。</p>
+            </div>
+
+            <nav class="page-nav" aria-label="site pages">
+              <a class="page-nav-link" href="./index.html">主页</a>
+              <a class="page-nav-link" href="./blog.html">博客</a>
+              <a class="page-nav-link is-active" href="./profile.html" aria-current="page">个人资料</a>
+              <a class="page-nav-link" href="./contact.html">联系方式</a>
+            </nav>
+          </div>
+
+          <section class="subpage-section" aria-labelledby="profile-core-title">
+            <div class="subpage-section-header">
+              <p class="subpage-kicker">Core Snapshot</p>
+              <h2 class="subpage-section-title" id="profile-core-title">现在这页可以承载的内容</h2>
+            </div>
+
+            <div class="subpage-card-grid">
+              <article class="subpage-card">
+                <p class="subpage-card-kicker">Identity</p>
+                <h3>个人简介</h3>
+                <p>把“我是谁、我在做什么、我为什么做这个站”完整写开，比首页那一小段更能建立印象。</p>
+              </article>
+              <article class="subpage-card">
+                <p class="subpage-card-kicker">Focus</p>
+                <h3>长期兴趣</h3>
+                <p>可以放技术折腾、个人表达、审美偏好、收藏方向，甚至是你想慢慢形成的个人主题。</p>
+              </article>
+              <article class="subpage-card">
+                <p class="subpage-card-kicker">Workstyle</p>
+                <h3>做事方式</h3>
+                <p>比如偏爱自己搭系统、重视入口统一、喜欢慢慢打磨界面，这些都很适合落在这里。</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="subpage-section" aria-labelledby="profile-expand-title">
+            <div class="subpage-section-header">
+              <p class="subpage-kicker">Expand Later</p>
+              <h2 class="subpage-section-title" id="profile-expand-title">接下来还可以继续补什么</h2>
+            </div>
+            <ul class="subpage-list">
+              <li>补一版正式的个人介绍和一句更稳定的自我定位。</li>
+              <li>加上项目经历、时间线或者技能树，做成更像个人名片的结构。</li>
+              <li>如果后面有照片、作品截图，也可以在这里做成更视觉化的展示页。</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>Zeavin Portal <span id="current-year">2026</span> · 把概览拆成独立页面，信息会更耐看。</p>
+    </footer>
+  </div>
+
+  <script src="./subpage.js"></script>
+</body>
+</html>
