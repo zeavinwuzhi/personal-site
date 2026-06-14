@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zeavin · 个人资料</title>
-  <meta name="description" content="Zeavin 的个人资料分区，放个人介绍、兴趣与正在进行的方向。">
+  <meta name="description" content="Zeavin 的个人资料页，访客可阅读公开信息，登录后可修改。">
   <meta name="theme-color" content="#14181d">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -14,21 +14,29 @@
       <section class="hero subpage-hero">
         <div class="subpage-grid">
           <div class="subpage-top">
-            <div class="portal-toolbar subpage-toolbar" aria-label="profile toolbar">
-              <div class="portal-auth-state">PROFILE</div>
+            <div class="portal-toolbar subpage-toolbar" aria-label="owner controls">
+              <div class="portal-auth-state" id="portal-auth-state">未登录</div>
               <div class="portal-clock" aria-label="current time">
                 <strong class="portal-clock-value" id="live-clock">--:--</strong>
               </div>
               <div class="portal-toolbar-actions">
-                <a class="portal-toolbar-button" href="./index.html">Home</a>
+                <button class="portal-toolbar-button" id="auth-toggle-button" type="button">Login</button>
+                <button class="portal-toolbar-button portal-toolbar-button-muted" id="auth-settings-button" type="button" disabled>Settings</button>
               </div>
             </div>
 
-            <div class="subpage-intro">
-              <p class="subpage-kicker">About Zeavin</p>
-              <h1>个人资料</h1>
-              <p>这一页适合把首页里那种“概览式介绍”拆开，单独放更完整的自我介绍、偏好、长期方向和持续在做的事。</p>
+            <div class="title-lockup" aria-label="Zeavin">
+              <h1>Zeav<span class="title-accent">i</span>n</h1>
+              <div class="title-trail" aria-hidden="true">
+                <span class="title-avatar">
+                  <img src="./assets/zeavin-avatar.jpg" alt="">
+                </span>
+                <span class="title-strip">
+                  <img src="./assets/zeavin-lineup.gif" alt="">
+                </span>
+              </div>
             </div>
+            <p class="hero-quote">负尽千重罪，炼就不死心</p>
 
             <nav class="page-nav" aria-label="site pages">
               <a class="page-nav-link" href="./index.html">主页</a>
@@ -38,49 +46,164 @@
             </nav>
           </div>
 
-          <section class="subpage-section" aria-labelledby="profile-core-title">
-            <div class="subpage-section-header">
-              <p class="subpage-kicker">Core Snapshot</p>
-              <h2 class="subpage-section-title" id="profile-core-title">现在这页可以承载的内容</h2>
-            </div>
+          <div class="subpage-content">
+            <section class="subpage-section" aria-labelledby="profile-public-title">
+              <div class="subpage-section-header">
+                <p class="subpage-kicker">Public Profile</p>
+                <h2 class="subpage-section-title" id="profile-public-title">关于 Zeavin</h2>
+                <p class="subpage-section-copy">参考成熟个人主页常见的公开展示区，把信息整理成便于阅读的卡片，而不是把编辑表单直接展示给访客。</p>
+              </div>
 
-            <div class="subpage-card-grid">
-              <article class="subpage-card">
-                <p class="subpage-card-kicker">Identity</p>
-                <h3>个人简介</h3>
-                <p>把“我是谁、我在做什么、我为什么做这个站”完整写开，比首页那一小段更能建立印象。</p>
-              </article>
-              <article class="subpage-card">
-                <p class="subpage-card-kicker">Focus</p>
-                <h3>长期兴趣</h3>
-                <p>可以放技术折腾、个人表达、审美偏好、收藏方向，甚至是你想慢慢形成的个人主题。</p>
-              </article>
-              <article class="subpage-card">
-                <p class="subpage-card-kicker">Workstyle</p>
-                <h3>做事方式</h3>
-                <p>比如偏爱自己搭系统、重视入口统一、喜欢慢慢打磨界面，这些都很适合落在这里。</p>
-              </article>
-            </div>
-          </section>
+              <div class="subpage-editor-grid">
+                <article class="subpage-preview-card subpage-profile-summary">
+                  <p class="subpage-kicker">Overview</p>
+                  <h3 data-profile-view-name>Zeavin</h3>
+                  <p class="subpage-card-kicker" data-profile-view-title>个人主页 / 家庭网络 / 远程入口</p>
+                  <p class="subpage-profile-meta" data-profile-view-location>Shanghai · UTC+8</p>
+                  <div class="subpage-divider"></div>
+                  <p class="subpage-preview-copy" data-profile-view-intro>这里会显示公开的个人介绍。</p>
+                  <p class="subpage-preview-copy" data-profile-view-signature>自我完整，即是乐趣</p>
+                  <div class="subpage-chip-list" data-profile-view-tags></div>
+                </article>
 
-          <section class="subpage-section" aria-labelledby="profile-expand-title">
-            <div class="subpage-section-header">
-              <p class="subpage-kicker">Expand Later</p>
-              <h2 class="subpage-section-title" id="profile-expand-title">接下来还可以继续补什么</h2>
-            </div>
-            <ul class="subpage-list">
-              <li>补一版正式的个人介绍和一句更稳定的自我定位。</li>
-              <li>加上项目经历、时间线或者技能树，做成更像个人名片的结构。</li>
-              <li>如果后面有照片、作品截图，也可以在这里做成更视觉化的展示页。</li>
-            </ul>
-          </section>
+                <div class="subpage-card-grid subpage-card-grid--stacked">
+                  <article class="subpage-card">
+                    <p class="subpage-card-kicker">Focus</p>
+                    <h3>近期关注</h3>
+                    <p data-profile-view-focus>NAS、远程桌面、网站改版、个人知识库</p>
+                  </article>
+                  <article class="subpage-card">
+                    <p class="subpage-card-kicker">Style</p>
+                    <h3>做事风格</h3>
+                    <p data-profile-view-style>偏爱慢慢打磨，保留一点江湖气，也保留一点实用主义。</p>
+                  </article>
+                </div>
+              </div>
+            </section>
+
+            <section class="subpage-section subpage-owner-panel" data-owner-panel="profile" hidden aria-labelledby="profile-edit-title">
+              <div class="subpage-section-header">
+                <p class="subpage-kicker">Owner Mode</p>
+                <h2 class="subpage-section-title" id="profile-edit-title">登录后修改资料</h2>
+                <p class="subpage-section-copy">这一块只在你本人登录后出现，用来更新公开资料内容。访客只会看到上面的展示区。</p>
+              </div>
+
+              <div class="subpage-editor-grid">
+                <form class="subpage-form" data-profile-form>
+                  <div class="subpage-field-grid">
+                    <label class="subpage-field">
+                      <span class="subpage-label">展示名称</span>
+                      <input class="subpage-input" type="text" data-profile-field="name">
+                    </label>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">个人定位</span>
+                      <input class="subpage-input" type="text" data-profile-field="title">
+                    </label>
+
+                    <div class="subpage-field--split">
+                      <label class="subpage-field">
+                        <span class="subpage-label">所在地</span>
+                        <input class="subpage-input" type="text" data-profile-field="location">
+                      </label>
+                      <label class="subpage-field">
+                        <span class="subpage-label">个人签名</span>
+                        <input class="subpage-input" type="text" data-profile-field="signature">
+                      </label>
+                    </div>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">自我介绍</span>
+                      <textarea class="subpage-textarea" data-profile-field="intro" rows="5"></textarea>
+                    </label>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">长期关注</span>
+                      <textarea class="subpage-textarea" data-profile-field="focus" rows="3"></textarea>
+                    </label>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">做事风格</span>
+                      <textarea class="subpage-textarea" data-profile-field="style" rows="3"></textarea>
+                    </label>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">标签</span>
+                      <input class="subpage-input" type="text" data-profile-field="tags" placeholder="NAS, Remote, Blog">
+                    </label>
+                  </div>
+
+                  <div class="subpage-form-actions">
+                    <button class="subpage-button subpage-button-primary" type="submit">保存个人资料</button>
+                    <button class="subpage-button subpage-button-secondary" type="button" data-profile-reset>恢复默认资料</button>
+                  </div>
+
+                  <p class="subpage-status" data-profile-status aria-live="polite"></p>
+                </form>
+
+                <aside class="subpage-preview-card">
+                  <p class="subpage-kicker">Live Preview</p>
+                  <h3 data-profile-preview-name>Zeavin</h3>
+                  <p class="subpage-card-kicker" data-profile-preview-title>个人主页 / 家庭网络 / 远程入口</p>
+                  <p class="subpage-profile-meta" data-profile-preview-location>Shanghai · UTC+8</p>
+                  <div class="subpage-divider"></div>
+                  <p class="subpage-preview-copy" data-profile-preview-intro>这里会实时显示你刚才输入的个人简介。</p>
+                  <p class="subpage-preview-copy" data-profile-preview-focus></p>
+                  <p class="subpage-preview-copy" data-profile-preview-style></p>
+                  <p class="subpage-preview-copy" data-profile-preview-signature></p>
+                  <div class="subpage-chip-list" data-profile-preview-tags></div>
+                </aside>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="page-footer">
-      <p>Zeavin Portal <span id="current-year">2026</span> · 把概览拆成独立页面，信息会更耐看。</p>
+      <p>Zeavin Portal <span id="current-year">2026</span> · 先把人展示清楚，再把修改入口留给自己。</p>
     </footer>
+  </div>
+
+  <div class="unlock-modal" id="unlock-modal" hidden>
+    <div class="unlock-modal-backdrop" id="unlock-modal-backdrop"></div>
+    <section class="unlock-dialog" aria-labelledby="unlock-title" aria-modal="true" role="dialog">
+      <p class="unlock-kicker">Owner Access</p>
+      <h2 id="unlock-title">登录编辑模式</h2>
+      <form class="unlock-form" id="unlock-form">
+        <label class="unlock-label" for="unlock-input">登录口令</label>
+        <input class="unlock-input" id="unlock-input" type="password" autocomplete="current-password" required>
+        <p class="unlock-feedback" id="unlock-feedback" aria-live="polite"></p>
+        <div class="unlock-actions">
+          <button class="unlock-button unlock-button-secondary" id="unlock-cancel" type="button">取消</button>
+          <button class="unlock-button unlock-button-primary" id="unlock-submit-button" type="submit">Login</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="unlock-modal" id="settings-modal" hidden>
+    <div class="unlock-modal-backdrop" id="settings-modal-backdrop"></div>
+    <section class="unlock-dialog" aria-labelledby="settings-title" aria-modal="true" role="dialog">
+      <p class="unlock-kicker">Passphrase Settings</p>
+      <h2 id="settings-title">修改登录口令</h2>
+      <form class="unlock-form" id="settings-form">
+        <label class="unlock-label" for="settings-current-password">当前口令</label>
+        <input class="unlock-input" id="settings-current-password" type="password" autocomplete="current-password" required>
+
+        <label class="unlock-label" for="settings-new-password">新口令</label>
+        <input class="unlock-input" id="settings-new-password" type="password" autocomplete="new-password" required>
+
+        <label class="unlock-label" for="settings-confirm-password">确认新口令</label>
+        <input class="unlock-input" id="settings-confirm-password" type="password" autocomplete="new-password" required>
+
+        <p class="unlock-feedback" id="settings-feedback" aria-live="polite"></p>
+        <div class="unlock-actions">
+          <button class="unlock-button unlock-button-secondary" id="settings-cancel" type="button">取消</button>
+          <button class="unlock-button unlock-button-primary" type="submit">保存新口令</button>
+        </div>
+      </form>
+    </section>
   </div>
 
   <script src="./subpage.js"></script>

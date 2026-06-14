@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zeavin · 博客</title>
-  <meta name="description" content="Zeavin 的博客分区，预留日常记录、项目复盘和随笔。">
+  <meta name="description" content="Zeavin 的博客页，访客可阅读文章，登录后可编辑与发布。">
   <meta name="theme-color" content="#14181d">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -14,21 +14,29 @@
       <section class="hero subpage-hero">
         <div class="subpage-grid">
           <div class="subpage-top">
-            <div class="portal-toolbar subpage-toolbar" aria-label="blog toolbar">
-              <div class="portal-auth-state">BLOG</div>
+            <div class="portal-toolbar subpage-toolbar" aria-label="owner controls">
+              <div class="portal-auth-state" id="portal-auth-state">未登录</div>
               <div class="portal-clock" aria-label="current time">
                 <strong class="portal-clock-value" id="live-clock">--:--</strong>
               </div>
               <div class="portal-toolbar-actions">
-                <a class="portal-toolbar-button" href="./index.html">Home</a>
+                <button class="portal-toolbar-button" id="auth-toggle-button" type="button">Login</button>
+                <button class="portal-toolbar-button portal-toolbar-button-muted" id="auth-settings-button" type="button" disabled>Settings</button>
               </div>
             </div>
 
-            <div class="subpage-intro">
-              <p class="subpage-kicker">Writing Deck</p>
-              <h1>博客与随笔</h1>
-              <p>这里准备放项目复盘、折腾记录、日常想法和一些慢慢长出来的长文。现在先把结构搭好，后面你可以继续往里面填真正的内容。</p>
+            <div class="title-lockup" aria-label="Zeavin">
+              <h1>Zeav<span class="title-accent">i</span>n</h1>
+              <div class="title-trail" aria-hidden="true">
+                <span class="title-avatar">
+                  <img src="./assets/zeavin-avatar.jpg" alt="">
+                </span>
+                <span class="title-strip">
+                  <img src="./assets/zeavin-lineup.gif" alt="">
+                </span>
+              </div>
             </div>
+            <p class="hero-quote">负尽千重罪，炼就不死心</p>
 
             <nav class="page-nav" aria-label="site pages">
               <a class="page-nav-link" href="./index.html">主页</a>
@@ -38,50 +46,136 @@
             </nav>
           </div>
 
-          <section class="subpage-section" aria-labelledby="blog-plan-title">
-            <div class="subpage-section-header">
-              <p class="subpage-kicker">Recent Columns</p>
-              <h2 class="subpage-section-title" id="blog-plan-title">准备展开的几个栏目</h2>
-              <p class="subpage-section-copy">先把你后续最可能持续更新的内容做成几个独立分栏，之后发文时就不会都堆在首页里。</p>
-            </div>
+          <div class="subpage-content">
+            <section class="subpage-section" aria-labelledby="blog-reader-title">
+              <div class="subpage-section-header">
+                <p class="subpage-kicker">Journal</p>
+                <h2 class="subpage-section-title" id="blog-reader-title">文章目录</h2>
+                <p class="subpage-section-copy">参考成熟个人博客的常见做法，先把标题列出来，点击后再进入正文阅读区，避免首页和列表页一次塞太多内容。</p>
+              </div>
 
-            <div class="subpage-card-grid">
-              <article class="subpage-card">
-                <p class="subpage-card-kicker">01</p>
-                <h3>折腾记录</h3>
-                <p>记录 NAS、远程桌面、网络入口、页面改造这些“自己给自己搭系统”的过程。</p>
-              </article>
-              <article class="subpage-card">
-                <p class="subpage-card-kicker">02</p>
-                <h3>项目复盘</h3>
-                <p>把正在做的站点、工具或脚本拆成可回看的阶段笔记，方便以后重构或继续扩展。</p>
-              </article>
-              <article class="subpage-card">
-                <p class="subpage-card-kicker">03</p>
-                <h3>随笔碎片</h3>
-                <p>留给更生活化、情绪化、灵感型的内容，不必都写成长文，也能慢慢形成个人气味。</p>
-              </article>
-            </div>
-          </section>
+              <div class="subpage-blog-layout">
+                <aside class="subpage-post-rail" aria-label="article list">
+                  <p class="subpage-card-kicker">Titles Only</p>
+                  <div class="subpage-post-links" data-blog-reader-list></div>
+                </aside>
 
-          <section class="subpage-section" aria-labelledby="blog-roadmap-title">
-            <div class="subpage-section-header">
-              <p class="subpage-kicker">Posting Flow</p>
-              <h2 class="subpage-section-title" id="blog-roadmap-title">后续可以怎么继续补</h2>
-            </div>
-            <ul class="subpage-list">
-              <li>给博客接一个文章列表页，按时间或分类展示。</li>
-              <li>首页只保留 2 到 3 条最新文章预览，把完整阅读放到这里。</li>
-              <li>如果你后面要接 Markdown 或静态博客生成器，这一页也可以直接演化成真正的文章入口。</li>
-            </ul>
-          </section>
+                <article class="subpage-article-detail" aria-live="polite">
+                  <p class="subpage-kicker">Reading View</p>
+                  <h3 data-blog-active-title>等待选择文章</h3>
+                  <p class="subpage-card-kicker" data-blog-active-meta>请先从左侧点开一篇文章</p>
+                  <p class="subpage-preview-copy" data-blog-active-summary>公开页面默认只展示标题，正文会在这里展开。</p>
+                  <div class="subpage-divider"></div>
+                  <div class="subpage-rich-copy" data-blog-active-content>点击标题后，这里会显示文章全文。</div>
+                  <div class="subpage-post-card-actions" data-blog-detail-actions></div>
+                </article>
+              </div>
+            </section>
+
+            <section class="subpage-section subpage-owner-panel" data-owner-panel="blog" hidden aria-labelledby="blog-compose-title">
+              <div class="subpage-section-header">
+                <p class="subpage-kicker">Owner Mode</p>
+                <h2 class="subpage-section-title" id="blog-compose-title">登录后编辑文章</h2>
+                <p class="subpage-section-copy">这一块只给你自己用，负责起草、发布、修改和删除文章。访客不会看到这里。</p>
+              </div>
+
+              <div class="subpage-editor-grid">
+                <form class="subpage-form" data-blog-form>
+                  <div class="subpage-field-grid">
+                    <label class="subpage-field">
+                      <span class="subpage-label">标题</span>
+                      <input class="subpage-input" type="text" data-blog-field="title" placeholder="文章标题">
+                    </label>
+
+                    <div class="subpage-field--split">
+                      <label class="subpage-field">
+                        <span class="subpage-label">分类</span>
+                        <input class="subpage-input" type="text" data-blog-field="category" placeholder="更新日志">
+                      </label>
+                      <label class="subpage-field">
+                        <span class="subpage-label">发布日期</span>
+                        <input class="subpage-input" type="date" data-blog-field="date">
+                      </label>
+                    </div>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">摘要</span>
+                      <textarea class="subpage-textarea" data-blog-field="summary" rows="4" placeholder="文章摘要"></textarea>
+                    </label>
+
+                    <label class="subpage-field">
+                      <span class="subpage-label">正文</span>
+                      <textarea class="subpage-textarea" data-blog-field="content" rows="12" placeholder="正文内容"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="subpage-form-actions">
+                    <button class="subpage-button subpage-button-primary" type="submit" data-blog-submit>发布文章</button>
+                    <button class="subpage-button subpage-button-secondary" type="button" data-blog-reset>恢复默认草稿</button>
+                  </div>
+
+                  <p class="subpage-status" data-blog-status aria-live="polite"></p>
+                </form>
+
+                <aside class="subpage-preview-card" aria-label="draft preview">
+                  <p class="subpage-kicker">Draft Preview</p>
+                  <h3 data-blog-preview-title>未命名文章</h3>
+                  <p class="subpage-card-kicker" data-blog-preview-meta>未分类 · --</p>
+                  <p class="subpage-preview-copy" data-blog-preview-summary>摘要会显示在阅读视图的开头。</p>
+                  <div class="subpage-divider"></div>
+                  <p class="subpage-preview-copy" data-blog-preview-content>在这里起草正文，保存后访客会从标题列表点开阅读。</p>
+                </aside>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="page-footer">
-      <p>Zeavin Portal <span id="current-year">2026</span> · 让内容分层，也让主页更从容。</p>
+      <p>Zeavin Portal <span id="current-year">2026</span> · 先把标题亮出来，再把正文留给真正愿意读的人。</p>
     </footer>
+  </div>
+
+  <div class="unlock-modal" id="unlock-modal" hidden>
+    <div class="unlock-modal-backdrop" id="unlock-modal-backdrop"></div>
+    <section class="unlock-dialog" aria-labelledby="unlock-title" aria-modal="true" role="dialog">
+      <p class="unlock-kicker">Owner Access</p>
+      <h2 id="unlock-title">登录编辑模式</h2>
+      <form class="unlock-form" id="unlock-form">
+        <label class="unlock-label" for="unlock-input">登录口令</label>
+        <input class="unlock-input" id="unlock-input" type="password" autocomplete="current-password" required>
+        <p class="unlock-feedback" id="unlock-feedback" aria-live="polite"></p>
+        <div class="unlock-actions">
+          <button class="unlock-button unlock-button-secondary" id="unlock-cancel" type="button">取消</button>
+          <button class="unlock-button unlock-button-primary" id="unlock-submit-button" type="submit">Login</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="unlock-modal" id="settings-modal" hidden>
+    <div class="unlock-modal-backdrop" id="settings-modal-backdrop"></div>
+    <section class="unlock-dialog" aria-labelledby="settings-title" aria-modal="true" role="dialog">
+      <p class="unlock-kicker">Passphrase Settings</p>
+      <h2 id="settings-title">修改登录口令</h2>
+      <form class="unlock-form" id="settings-form">
+        <label class="unlock-label" for="settings-current-password">当前口令</label>
+        <input class="unlock-input" id="settings-current-password" type="password" autocomplete="current-password" required>
+
+        <label class="unlock-label" for="settings-new-password">新口令</label>
+        <input class="unlock-input" id="settings-new-password" type="password" autocomplete="new-password" required>
+
+        <label class="unlock-label" for="settings-confirm-password">确认新口令</label>
+        <input class="unlock-input" id="settings-confirm-password" type="password" autocomplete="new-password" required>
+
+        <p class="unlock-feedback" id="settings-feedback" aria-live="polite"></p>
+        <div class="unlock-actions">
+          <button class="unlock-button unlock-button-secondary" id="settings-cancel" type="button">取消</button>
+          <button class="unlock-button unlock-button-primary" type="submit">保存新口令</button>
+        </div>
+      </form>
+    </section>
   </div>
 
   <script src="./subpage.js"></script>

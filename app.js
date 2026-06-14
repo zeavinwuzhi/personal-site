@@ -31,10 +31,16 @@ const playerCollapsedTitle = document.getElementById("player-collapsed-title");
 const playerCollapsedMeta = document.getElementById("player-collapsed-meta");
 const liveClock = document.getElementById("live-clock");
 const currentYear = document.getElementById("current-year");
+const heroMain = document.querySelector(".hero-main");
+const titleLockup = document.querySelector(".title-lockup");
+const heroQuote = document.querySelector(".hero-quote");
+const pageNav = document.querySelector(".page-nav");
+const searchShell = document.querySelector(".search-shell");
 const portalAuthState = document.getElementById("portal-auth-state");
 const authToggleButton = document.getElementById("auth-toggle-button");
 const authSettingsButton = document.getElementById("auth-settings-button");
 const accessNote = document.getElementById("access-note");
+const accessStrip = document.querySelector(".access-strip");
 const protectedEntryGroup = document.getElementById("protected-entry-group");
 const accessLockedState = document.getElementById("access-locked-state");
 const protectedEntryButtons = document.querySelectorAll(".protected-entry-button");
@@ -54,6 +60,7 @@ const settingsConfirmPassword = document.getElementById("settings-confirm-passwo
 const settingsCancel = document.getElementById("settings-cancel");
 const settingsFeedback = document.getElementById("settings-feedback");
 const favoritesGrid = document.getElementById("favorites-grid");
+const favoritesPanel = document.querySelector(".favorites-panel");
 const favoriteAddButton = document.getElementById("favorite-add-button");
 const favoriteExportButton = document.getElementById("favorite-export-button");
 const favoriteImportButton = document.getElementById("favorite-import-button");
@@ -62,8 +69,13 @@ const favoritesImportInput = document.getElementById("favorites-import-input");
 const FAVORITES_KEY = "zeavin-favorites";
 const PLAYLIST_STORAGE_KEY = "zeavin-custom-playlist";
 const PROTECTED_CONFIG_KEY = "zeavin-protected-config";
+const AUTH_SESSION_STORAGE_KEY = "zeavin-owner-session-passphrase";
 const PLAYER_COLLAPSE_KEY = "zeavin-player-collapsed";
+const PLAYER_COLLAPSE_VERSION_KEY = "zeavin-player-collapsed-version";
+const PLAYER_COLLAPSE_DEFAULT_VERSION = "4";
 const DEFAULT_PLAYLIST_URL = "./assets/music/playlist.json";
+const softPageNames = new Set(["", "index.html", "blog.html", "profile.html", "contact.html"]);
+const homePageNames = new Set(["", "index.html"]);
 const favoriteThemes = [
   "favorite-blue",
   "favorite-violet",
@@ -256,8 +268,26 @@ function saveProtectedEntries() {
   window.localStorage.setItem(PROTECTED_CONFIG_KEY, JSON.stringify(protectedEntries));
 }
 
+function emitAuthChange() {
+  window.dispatchEvent(new CustomEvent("zeavin-auth-change", {
+    detail: {
+      authenticated: Boolean(unlockedPassphrase),
+    },
+  }));
+}
+
 function saveSessionPassphrase(passphrase) {
   unlockedPassphrase = passphrase;
+  try {
+    if (passphrase) {
+      window.sessionStorage.setItem(AUTH_SESSION_STORAGE_KEY, passphrase);
+    } else {
+      window.sessionStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
+    }
+  } catch {
+    // Ignore session storage failures and keep the in-memory session.
+  }
+  emitAuthChange();
 }
 
 async function decryptProtectedEntry(targetId, passphrase) {
@@ -456,12 +486,23 @@ async function loginWithPassphrase(passphrase) {
 }
 
 function restoreSessionAuth() {
-  saveSessionPassphrase("");
+  try {
+    saveSessionPassphrase(window.sessionStorage.getItem(AUTH_SESSION_STORAGE_KEY) || "");
+  } catch {
+    saveSessionPassphrase("");
+  }
   updateAuthUI();
 }
 
 function loadPlayerCollapsedPreference() {
   try {
+    const version = window.localStorage.getItem(PLAYER_COLLAPSE_VERSION_KEY);
+    if (version !== PLAYER_COLLAPSE_DEFAULT_VERSION) {
+      window.localStorage.setItem(PLAYER_COLLAPSE_KEY, "true");
+      window.localStorage.setItem(PLAYER_COLLAPSE_VERSION_KEY, PLAYER_COLLAPSE_DEFAULT_VERSION);
+      return true;
+    }
+
     const raw = window.localStorage.getItem(PLAYER_COLLAPSE_KEY);
     if (raw === "true") {
       return true;
@@ -470,14 +511,15 @@ function loadPlayerCollapsedPreference() {
       return false;
     }
   } catch {
-    return window.matchMedia("(max-width: 720px)").matches;
+    return true;
   }
 
-  return window.matchMedia("(max-width: 720px)").matches;
+  return true;
 }
 
 function savePlayerCollapsedPreference() {
   window.localStorage.setItem(PLAYER_COLLAPSE_KEY, String(playerCollapsed));
+  window.localStorage.setItem(PLAYER_COLLAPSE_VERSION_KEY, PLAYER_COLLAPSE_DEFAULT_VERSION);
 }
 
 function syncCollapsedPlayerSummary() {
@@ -569,6 +611,214 @@ function updateLiveClock() {
     timeZone: "Asia/Shanghai",
   }).format(now);
   liveClock.textContent = `${datePart} ${timePart}`;
+}
+
+let softPagePanel = null;
+const homeDocumentTitle = document.title;
+const softPageHomeTargets = [searchShell, favoritesPanel, accessStrip].filter(Boolean);
+const softPageTransitionMs = 220;
+let softPageTransitionTimer = null;
+let softPageSwitchToken = 0;
+
+function normalizeSoftPath(value) {
+  const url = new URL(value, window.location.href);
+  return url.pathname === "/" ? "/" : url.pathname.replace(/\/$/, "");
+}
+
+function getSoftPageName(value) {
+  const pathname = normalizeSoftPath(value);
+  if (pathname === "/") {
+    return "";
+  }
+
+  return pathname.split("/").filter(Boolean).pop() || "";
+}
+
+function isSoftPagePath(value) {
+  return softPageNames.has(getSoftPageName(value));
+}
+
+function isHomeSoftPath(value) {
+  return homePageNames.has(getSoftPageName(value));
+}
+
+function getSoftPagePanel() {
+  if (softPagePanel) {
+    return softPagePanel;
+  }
+
+  softPagePanel = document.createElement("section");
+  softPagePanel.className = "soft-page-panel";
+  softPagePanel.hidden = true;
+  softPagePanel.setAttribute("aria-live", "polite");
+
+  if (heroMain) {
+    heroMain.insertBefore(softPagePanel, accessStrip || null);
+  }
+
+  return softPagePanel;
+}
+
+function clearSoftPageTransitionTimer() {
+  if (softPageTransitionTimer) {
+    window.clearTimeout(softPageTransitionTimer);
+    softPageTransitionTimer = null;
+  }
+}
+
+function setSoftPageMode(isSoftPage) {
+  const panel = getSoftPagePanel();
+
+  clearSoftPageTransitionTimer();
+
+  if (isSoftPage) {
+    panel.hidden = false;
+    softPageHomeTargets.forEach((element) => {
+      element.hidden = true;
+    });
+    heroGrid?.classList.add("is-soft-page");
+    return;
+  }
+
+  softPageHomeTargets.forEach((element) => {
+    element.hidden = false;
+  });
+  heroGrid?.classList.remove("is-soft-page");
+  if (!panel.hidden) {
+    panel.classList.add("is-fading");
+    softPageTransitionTimer = window.setTimeout(() => {
+      if (!heroGrid?.classList.contains("is-soft-page")) {
+        panel.hidden = true;
+        panel.classList.remove("is-fading");
+        panel.replaceChildren();
+      }
+    }, softPageTransitionMs);
+    return;
+  }
+
+  panel.hidden = true;
+  panel.replaceChildren();
+}
+
+function updateSoftNavState(pathname) {
+  if (!pageNav) {
+    return;
+  }
+
+  const activeName = isHomeSoftPath(pathname) ? "index.html" : getSoftPageName(pathname);
+  pageNav.querySelectorAll(".page-nav-link").forEach((link) => {
+    const linkName = getSoftPageName(link.href);
+    const normalizedLinkName = homePageNames.has(linkName) ? "index.html" : linkName;
+    const isActive = normalizedLinkName === activeName;
+    link.classList.toggle("is-active", isActive);
+    if (isActive) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
+function showHomePageContent(pathname, pushState = true) {
+  const panel = getSoftPagePanel();
+  softPageSwitchToken += 1;
+  setSoftPageMode(false);
+  document.title = homeDocumentTitle;
+  updateSoftNavState(pathname);
+
+  if (pushState && normalizeSoftPath(window.location.href) !== pathname) {
+    window.history.pushState({ softPage: pathname }, "", pathname);
+  }
+}
+
+async function showSoftPage(pathname, pushState = true) {
+  if (isHomeSoftPath(pathname)) {
+    showHomePageContent(pathname, pushState);
+    return;
+  }
+
+  const requestToken = ++softPageSwitchToken;
+  const response = await fetch(pathname, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Unable to load ${pathname}`);
+  }
+
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const sections = [...doc.querySelectorAll(".subpage-section")];
+  const panel = getSoftPagePanel();
+  const content = sections.map((node) => node.cloneNode(true));
+
+  if (requestToken !== softPageSwitchToken) {
+    return;
+  }
+
+  const shouldCrossfade = !panel.hidden && panel.childElementCount > 0;
+  if (shouldCrossfade) {
+    panel.classList.add("is-fading");
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, softPageTransitionMs);
+    });
+    if (requestToken !== softPageSwitchToken) {
+      return;
+    }
+  }
+
+  panel.replaceChildren(...content);
+  panel.hidden = false;
+  setSoftPageMode(true);
+
+  document.title = doc.title || homeDocumentTitle;
+  updateSoftNavState(pathname);
+  window.ZeavinSubpages?.mount?.(panel, getSoftPageName(pathname));
+
+  if (pushState && normalizeSoftPath(window.location.href) !== pathname) {
+    window.history.pushState({ softPage: pathname }, "", pathname);
+  }
+
+  requestAnimationFrame(() => {
+    panel.classList.remove("is-fading");
+  });
+}
+
+function initializeSoftNavigation() {
+  if (!pageNav || !heroMain) {
+    return;
+  }
+
+  pageNav.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+    if (!link) {
+      return;
+    }
+
+    const url = new URL(link.href, window.location.href);
+    if (url.origin !== window.location.origin) {
+      return;
+    }
+
+    const pathname = normalizeSoftPath(url.href);
+    if (!isSoftPagePath(pathname)) {
+      return;
+    }
+
+    event.preventDefault();
+    showSoftPage(pathname).catch(() => {
+      window.location.href = url.href;
+    });
+  });
+
+  window.addEventListener("popstate", () => {
+    const pathname = normalizeSoftPath(window.location.href);
+    if (isSoftPagePath(pathname)) {
+      showSoftPage(pathname, false).catch(() => {});
+    }
+  });
+
+  const initialPath = normalizeSoftPath(window.location.href);
+  if (isSoftPagePath(initialPath)) {
+    showSoftPage(initialPath, false).catch(() => {});
+  }
 }
 
 function getTrackSourceLabel(track) {
@@ -1560,5 +1810,6 @@ syncProgress();
 applyPlayerVisibility();
 updateLiveClock();
 window.setInterval(updateLiveClock, 1000);
+initializeSoftNavigation();
 restoreSessionAuth();
 loadDefaultPlaylist();
